@@ -1,6 +1,5 @@
 <template>
   <div>
-    <span>OnTrack - App</span>
     <router-view />
   </div>
    

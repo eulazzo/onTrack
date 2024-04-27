@@ -1,30 +1,23 @@
-import { createRouter, createWebHistory } from 'vue-router'
+// import store from '@store';
+import routes from './routes';
 
-const router = createRouter({
-  history: createWebHistory(import.meta.env.BASE_URL),
-  routes: [
-    {
-      path: '/home',
-      name: 'Home',
-      meta: {
-        title: "home",
-      },
-      component: () => import('../views/Home/Home.vue')
-    },
+routes.beforeEach(async (to, from, next) => {
+    if (to.matched.every((record) => !record.meta.requiresAuth)) {
+        next();
+        return;
+    }
 
-    {
-      path: '/login',
-      name: 'Login',
-      meta: {
-        title: "login",
-      },
-      component: () => import('../views/Login/Login.vue')
-    },
+    // if (!store.getters['Autenticacao/estaAutenticado']) {
+    //     next({ name: 'login', params: { redirect: to?.path }, });
+    //     return;
+    // }
 
-  ]
+    const paginasQueVaoParaInicio = ['login'];
+    if (paginasQueVaoParaInicio.includes(to.name)) {
+        next({ name: 'dashboard' });
+        return;
+    }
+    next();
 });
 
-
- 
-
-export default router
+export default routes;
